@@ -12,3 +12,25 @@ export function login(data) {
     data
   })
 }
+
+/**
+ * 获取用户基本资料
+ * @returns  promise
+ */
+export const getUserInfo = () => {
+  return request({
+    url: '/sys/profile',
+    method: 'POST'
+  })
+}
+
+/**
+ * 获取员工基本信息
+ * @param {*} id userID
+ * @returns
+ */
+export const getUserImg = (id) => {
+  return request({
+    url: `/sys/user/${id}`
+  })
+}

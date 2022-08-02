@@ -5,6 +5,12 @@ const whiteList = ['/login', '/404']
 router.beforeEach((to, from, next) => {
   const token = store.state.user.token
   if (token) {
+    // 如果有数据，则不需要再发请求
+    if (!store.state.user.userId) {
+      store.dispatch('user/getUserInfo')
+    }
+    // 获取用户信息
+
     // 1.登录
     // 是否进入登录页
     // 1.1 是 跳到首页
