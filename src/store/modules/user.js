@@ -1,4 +1,5 @@
 import { getUserInfo, login, getUserImg } from '@/api/user'
+import { setTokenTime } from '@/utils/auth'
 
 export default {
   namespaced: true,
@@ -23,6 +24,7 @@ export default {
       const res = await login(payload)
       // console.log(res)
       context.commit('setToken', res)
+      setTokenTime()
     },
     // 获取用户信息
     async getUserInfo(context) {
@@ -30,6 +32,11 @@ export default {
       // 获取用户头像
       const res1 = await getUserImg(res.userId)
       context.commit('setUserInfo', { ...res, ...res1 })
+    },
+    // 退出
+    logout(context) {
+      context.commit('setToken', '')
+      context.commit('setUserInfo', {})
     }
   }
 }

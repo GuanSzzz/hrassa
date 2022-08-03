@@ -15,6 +15,9 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
+// 引入自定义指令文件夹
+import * as directives from '@/directives'
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -37,9 +40,17 @@ Vue.use(ElementUI, { locale })
 // 开发环境的提示
 Vue.config.productionTip = false
 
+// 自定义指令，判断图片是否有，没有自动补全
+// 参数1：自定义指令的名字 这里不需要加V-，但是在使用的时候要加
+// 参数2：是配置对象
+// 因为引入的文件夹是一个对象，可以循环遍历绑定自定义事件
+for (let key in directives) {
+  Vue.directive(key, directives[key])
+}
+
 new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App)
 })

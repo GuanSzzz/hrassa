@@ -90,6 +90,7 @@ export default {
       this.isload = true
       try {
         await this.$refs.loginForm.validate()
+
         await this.$store.dispatch('user/getToken', this.loginForm)
         this.$router.push('/')
         this.$message.success('登录成功')
