@@ -115,3 +115,24 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+/**
+ * 将数据处理成树形
+ * @param {*} data  原数据
+ * @param {*} pid   父级id
+ * @returns 
+ */
+export  function changeTree(data, pid) {
+  const arr = []
+  data.forEach((item) => {
+    if (item.pid === pid) {
+      const children = changeTree(data, item.id)
+      //   如果有孩子，则给该item添加孩子
+      if (children.length) {
+        item.children = children
+      }
+      arr.push(item)
+    }
+  })
+  return arr
+}
