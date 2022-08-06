@@ -9,3 +9,33 @@ export const getDeptsApi = () => {
     url: '/company/department'
   })
 }
+
+/**
+ * 删除部门
+ * @param {*} id  部门id
+ * @returns
+ */
+export const delDeptsApi = (id) => {
+  return request({
+    url: '/company/department/' + id,
+    method: 'DELETE'
+  })
+}
+
+/**
+ * 新增部门
+ * @param {*} data
+ * code	 部门编码，同级部门不可重复
+ *introduce	介绍
+ *manager	负责人名称
+ *name部门名称
+ *pid	父级部门ID
+ * @returns
+ */
+export const addDeptApi = (data) => {
+  return request({
+    url: '/company/department',
+    method: 'POST',
+    data
+  })
+}
