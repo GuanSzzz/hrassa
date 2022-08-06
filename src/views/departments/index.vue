@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="app-container">
-      <el-card class="box-card">
+      <el-card class="box-card" v-loading="loading">
         <!-- 头部 -->
         <TreeTools
           :treeNode="company"
@@ -17,17 +17,15 @@
               :treeNode="data"
               @remove="getDepts"
               @add="addDept"
+              @edit="editDept"
             ></TreeTools>
           </template>
-          <!-- 内部组件 -->
-          <!-- <template>
-            <slot :node=""  :data=""/>
-          </template> -->
         </el-tree>
       </el-card>
 
       <!-- 添加部门弹窗 -->
       <AddDept
+        ref="adddept"
         :dialogVisible.sync="isVisible"
         :currentNode="currentNode"
         @add-success="getDepts"
@@ -44,6 +42,7 @@ import AddDept from './components/add-dept.vue'
 export default {
   data() {
     return {
+      loading: false,
       currentNode: {},
       defaultProps: {
         label: 'name'
@@ -64,13 +63,20 @@ export default {
 
   methods: {
     async getDepts() {
+      this.loading = true
       const res = await getDeptsApi()
       console.log(res)
       this.departs = changeTree(res.depts, '')
+      this.loading = false
     },
     addDept(val) {
       this.isVisible = true
       this.currentNode = val
+    },
+    editDept(val) {
+      this.isVisible = true
+      // 点击编辑按钮的时候，调用子组件的方法，触发请求，获取数据
+      this.$refs.adddept.getDeptById(val.id)
     }
   },
   components: {
