@@ -17,6 +17,9 @@ import '@/permission' // permission control
 
 // 引入自定义指令文件夹
 import * as directives from '@/directives'
+// 引入自定义组件
+import pageTools from '@/components'
+Vue.use(pageTools)
 
 /**
  * If you don't want to use mock-server
