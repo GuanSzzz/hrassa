@@ -15,11 +15,13 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 
-// 引入自定义指令文件夹
+// 引入自定义指令文件夹（下面注册）
 import * as directives from '@/directives'
-// 引入自定义组件
+// 引入自定义组件（里面注册）
 import pageTools from '@/components'
 Vue.use(pageTools)
+// 引入自定义过滤器（下面注册）
+import * as filters from '@/filters'
 
 /**
  * If you don't want to use mock-server
@@ -43,12 +45,17 @@ Vue.use(ElementUI, { locale })
 // 开发环境的提示
 Vue.config.productionTip = false
 
-// 自定义指令，判断图片是否有，没有自动补全
+// 统一注册自定义指令，判断图片是否有，没有自动补全
 // 参数1：自定义指令的名字 这里不需要加V-，但是在使用的时候要加
 // 参数2：是配置对象
 // 因为引入的文件夹是一个对象，可以循环遍历绑定自定义事件
 for (let key in directives) {
   Vue.directive(key, directives[key])
+}
+
+// 统一注册过滤器
+for (let key in filters) {
+  Vue.filter(key, filters[key])
 }
 
 new Vue({

@@ -6,10 +6,24 @@ export const imgError = {
   // 当被绑定的元素插入到DOM中时
   // el:被绑定的标签
   // value：结构的bind,是一个对象？
-  inserted: function (el, { value }) {
+  inserted(el, { value }) {
     // 聚焦元素
-    el.onerror = function () {
+    if (!el.src) {
       el.src = value
+    } else {
+      el.onerror = function () {
+        el.src = value
+      }
+    }
+  },
+  update(el, { value }) {
+    // 聚焦元素
+    if (!el.src) {
+      el.src = value
+    } else {
+      el.onerror = function () {
+        el.src = value
+      }
     }
   }
 }
