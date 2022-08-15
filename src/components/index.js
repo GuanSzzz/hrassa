@@ -1,8 +1,9 @@
 import PageTools from './PageTools'
 import UploadExcel from './UploadExcel'
+import UploadImg from './UploadImg'
 
 // 如果组件很多 可以利用数组的方法
-const components = [PageTools,UploadExcel]
+const components = [PageTools,UploadExcel,UploadImg]
 export default {
   install(Vue) {
     // Vue.component('PageTools', PageTools)
