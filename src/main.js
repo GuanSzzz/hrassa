@@ -22,6 +22,10 @@ import pageTools from '@/components'
 Vue.use(pageTools)
 // 引入自定义过滤器（下面注册）
 import * as filters from '@/filters'
+// 引入打印机
+import Print from 'vue-print-nb'
+Vue.use(Print);
+
 
 /**
  * If you don't want to use mock-server

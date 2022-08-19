@@ -36,6 +36,7 @@
                   height: 100px;
                   padding: 10px;
                 "
+                @click="showHeaderDialog(row.staffPhoto)"
               />
             </template>
           </el-table-column>
@@ -103,6 +104,10 @@
       :visible.sync="isVisible"
       @add-success="getEmployessList"
     ></addEmployees>
+    <!-- 二维码弹框 -->
+    <el-dialog title="二维码" :visible.sync="headerVisible">
+      <canvas id="canvas"></canvas>
+    </el-dialog>
   </div>
 </template>
 
@@ -111,6 +116,7 @@ import { getEmployessInfoApi, delEmployee } from '@/api/employess'
 import employees from '@/constant/employees'
 import addEmployees from './components/add-employees.vue'
 const { exportExcelMapPath } = employees
+import QRCode from 'qrcode'
 export default {
   data() {
     return {
@@ -120,7 +126,8 @@ export default {
         size: 10
       },
       total: 0,
-      isVisible: false
+      isVisible: false,
+      headerVisible: false
     }
   },
 
@@ -185,6 +192,16 @@ export default {
           autoWidth: true, //非必填
           bookType: 'xlsx' //非必填
         })
+      })
+    },
+    // 点击显示二维码头像
+    showHeaderDialog(staffPhoto) {
+      if (!staffPhoto) return this.$message.error('该用户没有头像')
+      this.headerVisible = true
+      // 数据驱动视图
+      this.$nextTick(() => {
+        const canvas = document.getElementById('canvas')
+        QRCode.toCanvas(canvas, staffPhoto)
       })
     }
   },
