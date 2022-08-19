@@ -75,7 +75,9 @@
               <el-button type="text" size="small">转正</el-button>
               <el-button type="text" size="small">调岗</el-button>
               <el-button type="text" size="small">离职</el-button>
-              <el-button type="text" size="small">角色</el-button>
+              <el-button type="text" size="small" @click="showRoleVisible(row)"
+                >角色</el-button
+              >
               <el-button type="text" size="small" @click="onRemove(row.id)"
                 >删除</el-button
               >
@@ -108,6 +110,11 @@
     <el-dialog title="二维码" :visible.sync="headerVisible">
       <canvas id="canvas"></canvas>
     </el-dialog>
+    <!-- 角色分配的弹框 -->
+    <assignRole
+      :visible.sync="rolevisible"
+      :employeesId="employeesId"
+    ></assignRole>
   </div>
 </template>
 
@@ -115,6 +122,7 @@
 import { getEmployessInfoApi, delEmployee } from '@/api/employess'
 import employees from '@/constant/employees'
 import addEmployees from './components/add-employees.vue'
+import assignRole from './components/assign-role.vue'
 const { exportExcelMapPath } = employees
 import QRCode from 'qrcode'
 export default {
@@ -127,7 +135,9 @@ export default {
       },
       total: 0,
       isVisible: false,
-      headerVisible: false
+      headerVisible: false,
+      rolevisible: false,
+      employeesId: ''
     }
   },
 
@@ -203,10 +213,16 @@ export default {
         const canvas = document.getElementById('canvas')
         QRCode.toCanvas(canvas, staffPhoto)
       })
+    },
+    // 点击角色，显示弹框
+    showRoleVisible(row) {
+      this.rolevisible = true
+      this.employeesId = row.id
     }
   },
   components: {
-    addEmployees
+    addEmployees,
+    assignRole
   }
 }
 </script>
