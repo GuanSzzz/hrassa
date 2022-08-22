@@ -2,6 +2,7 @@
 // 自定义指令，判断图片是否有，没有自动补全
 // 参数1：自定义指令的名字 这里不需要加V-，但是在使用的时候要加
 // 参数2：是配置对象
+import store from '@/store'
 export const imgError = {
   // 当被绑定的元素插入到DOM中时
   // el:被绑定的标签
@@ -24,6 +25,15 @@ export const imgError = {
       el.onerror = function () {
         el.src = value
       }
+    }
+  }
+}
+// 按钮权限判断
+export const isHas = {
+  inserted(el, bind) {
+    const has = store.state.permission.points.includes(bind.value)
+    if (!has) {
+      el.remove()
     }
   }
 }

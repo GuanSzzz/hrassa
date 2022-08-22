@@ -8,12 +8,17 @@
             size="small"
             type="warning"
             @click="$router.push('/import')"
+            v-if="isHas(points.employees.import)"
             >导入</el-button
           >
           <el-button size="small" type="danger" @click="exportExcel"
             >导出</el-button
           >
-          <el-button size="small" type="primary" @click="showAdd"
+          <el-button
+            size="small"
+            type="primary"
+            @click="showAdd"
+            v-isHas="points.employees.add"
             >新增员工</el-button
           >
         </template>
@@ -78,7 +83,11 @@
               <el-button type="text" size="small" @click="showRoleVisible(row)"
                 >角色</el-button
               >
-              <el-button type="text" size="small" @click="onRemove(row.id)"
+              <el-button
+                type="text"
+                size="small"
+                v-if="isHas(points.employees.del)"
+                @click="onRemove(row.id)"
                 >删除</el-button
               >
             </template>
@@ -125,7 +134,10 @@ import addEmployees from './components/add-employees.vue'
 import assignRole from './components/assign-role.vue'
 const { exportExcelMapPath } = employees
 import QRCode from 'qrcode'
+// import permissionPoints from '@/constant/permissionPoints'
+import permissionMixins from '@/mixins/permission'
 export default {
+  mixins: [permissionMixins],
   data() {
     return {
       employees: [],
@@ -138,6 +150,7 @@ export default {
       headerVisible: false,
       rolevisible: false,
       employeesId: ''
+      // points: permissionPoints
     }
   },
 
@@ -219,6 +232,9 @@ export default {
       this.rolevisible = true
       this.employeesId = row.id
     }
+    // isHas(val) {
+    //   return this.$store.state.permission.points.includes(val)
+    // }
   },
   components: {
     addEmployees,

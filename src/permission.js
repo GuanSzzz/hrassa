@@ -1,4 +1,4 @@
-import router from '@/router'
+import router, { asyncRoutes } from '@/router'
 import store from '@/store'
 // 全局前置路由守卫
 const whiteList = ['/login', '/404']
@@ -6,8 +6,16 @@ router.beforeEach(async (to, from, next) => {
   const token = store.state.user.token
   if (token) {
     // 如果有数据，则不需要再发请求
-    if (!store.state.user.userId) {
-      await store.dispatch('user/getUserInfo')
+    // console.log(store.state.user.userInfo.token)
+    if (!store.state.user.userInfo.userId) {
+      // 获取用户信息，返回值是一个Promise
+      const { roles } = await store.dispatch('user/getUserInfo')
+      // console.log(roles.menus)
+      // console.log(asyncRoutes)
+      // 在vuex处理
+      store.dispatch('permission/filtrtRoutes', roles)
+      // 已知的路由缺陷，刷新会丢失，必须在去到原来的页面
+      next(to.path)
     }
     // 获取用户信息
 

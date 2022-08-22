@@ -11,8 +11,11 @@
             <el-table-column prop="name" label="角色"> </el-table-column>
             <el-table-column prop="description" label="描述"> </el-table-column>
             <el-table-column prop="address" label="操作">
-              <template>
-                <el-button size="small" type="success" @click="allocation"
+              <template slot-scope="{ row }">
+                <el-button
+                  size="small"
+                  type="success"
+                  @click="allocation(row.id)"
                   >分配权限</el-button
                 >
                 <el-button size="small" type="primary">编辑</el-button>
@@ -95,6 +98,8 @@
       title="给角色分配权限"
       :visible.sync="setRightDialog"
       width="50%"
+      destroy-on-close
+      @close="roleOnclose"
     >
       <el-tree
         :data="permission"
@@ -103,18 +108,19 @@
         default-expand-all
         show-checkbox
         :default-checked-keys="defaultExpandKeys"
+        ref="perTree"
       ></el-tree>
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="setRightDialog = false">取 消</el-button>
-        <el-button type="primary">确 定</el-button>
+        <el-button type="primary" @click="onSaveRights">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getRolesApi, addRolesApi } from '@/api/role'
+import { getRolesApi, addRolesApi, getRoleInfo, assignPerm } from '@/api/role'
 import { getCompanyApi } from '@/api/setting'
 import { getPermissionList } from '@/api/permission'
 import { changeTree } from '@/utils'
@@ -143,7 +149,8 @@ export default {
       setRightDialog: false,
       permission: [],
       // 树形默认勾选节点
-      defaultExpandKeys: ['1', '1063327833876729856']
+      defaultExpandKeys: [],
+      roleId: ''
     }
   },
 
@@ -195,19 +202,37 @@ export default {
     },
     async getCompany() {
       const res = await getCompanyApi(this.$store.state.user.userInfo.companyId)
-      console.log(res)
+      // console.log(res)
       this.companyInfo = res
     },
     // 分配权限弹框 确认
-    allocation() {
+    async allocation(id) {
+      this.roleId = id
       this.setRightDialog = true
+      const res = await getRoleInfo(id)
+      // console.log(res)
+      this.defaultExpandKeys = res.permIds
     },
     // 获取权限列表
     async getPermissionList() {
       const res = await getPermissionList()
       const changetree = changeTree(res, '0')
       this.permission = changetree
-      console.log(this.permission)
+      // console.log(this.permission)
+    },
+    // 关闭角色分配弹窗
+    roleOnclose() {
+      // 关闭时清空树形节点的选中
+      this.defaultExpandKeys = []
+    },
+    // 点击角色分配弹窗的确认按钮
+    async onSaveRights() {
+      await assignPerm({
+        id: this.roleId,
+        permIds: this.$refs.perTree.getCheckedKeys()
+      })
+      this.$message.success('分配成功')
+      this.setRightDialog = false
     }
   }
 }
