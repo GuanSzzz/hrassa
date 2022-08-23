@@ -1,83 +1,77 @@
 <template>
-  <div>
-    <el-dialog
-      title="角色分配"
-      :visible="visible"
-      @close="onClose"
-      @open="onOpen"
-      center
-    >
-      <el-checkbox-group v-model="checkList">
-        <el-checkbox
-          :label="item.id"
-          name="type"
-          v-for="item in roles"
-          :key="item.id"
-          >{{ item.name }}</el-checkbox
-        >
-      </el-checkbox-group>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="onClose">取 消</el-button>
-        <el-button type="primary" @click="getassignRoles">确 定</el-button>
-      </span>
-    </el-dialog>
-  </div>
+  <el-dialog @open="onOpen" @close="close" title="分配角色" :visible="visible">
+    <el-checkbox-group v-model="checkList">
+      <!-- label: 渲染 name -->
+      <!-- 会记录选中值 id -->
+      <el-checkbox v-for="item in roles" :key="item.id" :label="item.id">
+        <!-- 插槽也可以用于渲染 -->
+        {{ item.name }}
+      </el-checkbox>
+    </el-checkbox-group>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="close">取 消</el-button>
+      <el-button type="primary" @click="assignRole">确 定</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
 import { getRolesApi } from '@/api/role'
-import { getUserImg } from '@/api/user'
-import { assignRoles } from '@/api/employess'
+import { getUserDetail } from '@/api/user'
+import { assignRoles } from '@/api/employees'
 export default {
   data() {
     return {
-      checkList: [],
-      roles: []
+      checkList: [], // 记录选中的角色
+      roles: [],
     }
   },
+
   props: {
     visible: {
       type: Boolean,
-      required: true
+      required: true,
     },
     employeesId: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
   created() {},
 
   methods: {
-    onClose() {
+    close() {
       this.$emit('update:visible', false)
     },
-    async getRoles() {
+    // 获取角色列表
+    async getRolesList() {
       const { rows } = await getRolesApi()
-
       this.roles = rows
     },
+    // 监听对话框打开
     onOpen() {
-      this.getRoles()
-      this.getUserImgDetail()
+      this.getRolesList()
+      this.getEmployeesRoles()
     },
-    //   获取员工详细列表
-    async getUserImgDetail() {
-      const { roleIds } = await getUserImg(this.employeesId)
+    // 获取员工角色
+    async getEmployeesRoles() {
+      // console.log()
+      const { roleIds } = await getUserDetail(this.employeesId)
       this.checkList = roleIds
     },
-    // 修改员工角色
-    async getassignRoles() {
-      if (!this.checkList.length) return this.$message.error('请选择员工角色')
+    // 分配角色
+    async assignRole() {
+      if (!this.checkList.length) return this.$message.error('请选择角色')
       await assignRoles({
         id: this.employeesId,
-        roleIds: this.checkList
+        roleIds: this.checkList,
       })
-      this.$message.success('更新成功')
-      this.onClose()
-    }
-  }
+      this.$message.success('分配成功')
+      this.close()
+    },
+  },
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="less"></style>

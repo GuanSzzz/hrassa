@@ -1,44 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import employees from './modules/employees'
+import approvals from './modules/approvals'
+import attendances from './modules/attendances'
+import departments from './modules/departments'
+import permission from './modules/permission'
+import salarys from './modules/salarys'
+import setting from './modules/setting'
+import social from './modules/social'
+import importModule from './modules/import'
 
 Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-// 引入多个模块的规则
-import approvalsRouter from './modules/approvals'
-import departmentsRouter from './modules/departments'
-import employeesRouter from './modules/employees'
-import permissionRouter from './modules/permission'
-import attendancesRouter from './modules/attendances'
-import salarysRouter from './modules/salarys'
-import settingRouter from './modules/setting'
-import socialRouter from './modules/social'
-import importModule from './modules/import'
-/**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
- */
-
-/**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
- */
 
 // 静态路由
 export const constantRoutes = [
@@ -63,25 +38,23 @@ export const constantRoutes = [
         path: 'dashboard',
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index'),
+        // 这里的das已经不是对应的值了，而是中英文切换里的，映射表的属性名
         meta: { title: '首页', icon: 'dashboard' }
       }
     ]
-  },
-
-  // 404 page must be placed at the end !!!
-  // { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
-// 动态路由，准备好项目所有的动态路由，基于后端返回的权限对动态路由进行筛选
+// 动态路由: 准备好项目所有动态路由, 基于后端返回的用户权限对动态路由进行筛选
 export const asyncRoutes = [
-  approvalsRouter,
-  departmentsRouter,
-  employeesRouter,
-  permissionRouter,
-  attendancesRouter,
-  salarysRouter,
-  settingRouter,
-  socialRouter,
+  employees,
+  approvals,
+  departments,
+  attendances,
+  permission,
+  salarys,
+  setting,
+  social,
   importModule
 ]
 
@@ -89,9 +62,9 @@ const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: [...constantRoutes]
+    routes: [...constantRoutes] // 路由规则
   })
-// new一个Router实例
+// vueRouter实例
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465

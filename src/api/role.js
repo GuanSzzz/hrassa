@@ -2,52 +2,57 @@ import request from '@/utils/request'
 
 /**
  * 获取角色列表
- * @param {*} params
- * page	是	1	页码
- * pagesize	是	10	每页条数
  */
-export const getRolesApi = (params) => {
+export function getRolesApi(params) {
   return request({
     url: '/sys/role',
-    params
+    params,
   })
 }
 
 /**
- * 新增角色
- * @param {*} data  {name,region}
- * @returns
+ * 添加角色
+ * @param {*} data {name, region}
  */
-export const addRolesApi = (data) => {
+export function addRoleApi(data) {
   return request({
     url: '/sys/role',
     method: 'POST',
-    data
+    data,
   })
 }
 
 /**
- * 根据ID获取角色详情
- * @param {*} data  {name,region}
- * @returns
+ * 通过角色id实现删除
+ * @param {*} id 角色id
  */
-export const getRoleInfo = (id) => {
+export function removeRoleApi(id) {
   return request({
-    url: `/sys/role/${id}`
+    url: '/sys/role/' + id,
+    method: 'DELETE',
   })
 }
 
-
-//
 /**
- *  给角色分配权限
- * @param {*} data {id,permIds}
- * @returns 
+ * 根据id获取角色详情
+ * @param {*} id 角色id
+ * @returns promise
+ */
+export function getRolesInfo(id) {
+  return request({
+    url: '/sys/role/' + id,
+  })
+}
+
+/**
+ * 给角色分配权限
+ * @param {*} data { id, permIds }
+ * @returns promise
  */
 export function assignPerm(data) {
   return request({
     url: '/sys/role/assignPrem',
     method: 'put',
-    data
+    data,
   })
 }

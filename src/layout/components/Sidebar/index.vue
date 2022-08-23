@@ -34,9 +34,8 @@ export default {
   computed: {
     ...mapGetters(['sidebar']),
     routes() {
-      // 这里要动态获取到路由,但是不能获取动态路由
-      // return this.$router.options.routes
-      // 这里要动态获取到路由进行渲染
+      // 可以获取到所有路由规则(动态添加的)
+      //  我们自己去维护一个路由规则(所有路由)
       return this.$store.state.permission.routes
     },
     activeMenu() {
@@ -56,7 +55,7 @@ export default {
     },
     isCollapse() {
       return !this.sidebar.opened
-    }
-  }
+    },
+  },
 }
 </script>

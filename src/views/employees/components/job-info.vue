@@ -1,9 +1,8 @@
 <template>
   <div>
-    <!-- 打印 -->
     <i
-      class="el-icon-printer"
       @click="$router.push('/employees/print?type=job')"
+      class="el-icon-printer"
     ></i>
   </div>
 </template>
@@ -16,8 +15,8 @@ export default {
 
   created() {},
 
-  methods: {}
+  methods: {},
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="less"></style>

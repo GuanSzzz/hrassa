@@ -3,13 +3,14 @@ export default {
   path: '/permission',
   component: Layout,
   meta: {
-    id: 'permissions'
+    id: 'permissions', // 用来和后端权限做约定的
   },
   children: [
     {
       path: '',
+      name:'permission',
       component: () => import('@/views/permission'),
-      meta: { title: '权限管理', icon: 'lock' }
-    }
-  ]
+      meta: { title: '权限管理', icon: 'lock' },
+    },
+  ],
 }

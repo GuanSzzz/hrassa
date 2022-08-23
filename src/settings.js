@@ -1,6 +1,5 @@
 module.exports = {
-// 设置标题
-  title: 'hrassa',
+  title: 'hrsaas',
 
   /**
    * @type {boolean} true | false
@@ -12,6 +11,5 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar
    */
-  // 侧边栏的Logo
-  sidebarLogo: true
+  sidebarLogo: true,
 }

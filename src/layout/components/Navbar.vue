@@ -6,17 +6,21 @@
       @toggleClick="toggleSideBar"
     />
 
+    <!-- <breadcrumb class="breadcrumb-container" /> -->
     <div class="app-breadcrumb">
       {{ $store.state.user.userInfo.companyName }}
       <span class="breadBtn">体验版</span>
     </div>
-    <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
+      <!-- 切换语言 -->
+      <ToggleLang />
+      <!-- 全屏插件 -->
+      <Fullscreen />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img
-            :src="$store.state.user.userInfo.staffPhoto"
+            :src="$store.getters.avatar"
             class="user-avatar"
             v-imgError="defaultImg"
           />
@@ -25,10 +29,10 @@
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
-            <el-dropdown-item> 首页 </el-dropdown-item>
+            <el-dropdown-item> Home </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display: block">登出</span>
+            <span style="display: block">Log Out</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -41,10 +45,11 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import defaultImg from '@/assets/common/head.jpg'
+
 export default {
+  // 如果想在data中定义本地图片路径,需要先引入
   data() {
     return {
-      // 如果放本地图片，需要先引入
       defaultImg
     }
   },
@@ -61,7 +66,7 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login`)
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 }
@@ -93,6 +98,7 @@ export default {
       margin-left: 15px;
     }
   }
+
   .hamburger-container {
     line-height: 46px;
     height: 100%;
@@ -102,6 +108,7 @@ export default {
     -webkit-tap-highlight-color: transparent;
     color: #fff;
     fill: currentColor;
+
     &:hover {
       background: rgba(0, 0, 0, 0.025);
     }
@@ -115,6 +122,7 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
+    display: flex;
 
     &:focus {
       outline: none;
@@ -142,14 +150,14 @@ export default {
       margin-right: 30px;
 
       .avatar-wrapper {
+        position: relative;
         display: flex;
         align-items: center;
-        position: relative;
-        cursor: pointer;
         color: #fff;
+        cursor: pointer;
 
         span {
-          margin: 0 5px;
+          margin: 0 3px;
         }
 
         .user-avatar {

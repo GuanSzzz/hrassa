@@ -1,14 +1,10 @@
-// 自定义指令的文件夹，全部都是自定义指令
-// 自定义指令，判断图片是否有，没有自动补全
-// 参数1：自定义指令的名字 这里不需要加V-，但是在使用的时候要加
-// 参数2：是配置对象
 import store from '@/store'
+// 定义自定义指令
 export const imgError = {
-  // 当被绑定的元素插入到DOM中时
-  // el:被绑定的标签
-  // value：结构的bind,是一个对象？
+  // 当被绑定的元素插入到 DOM 中时……
+  // 令绑定的元素插入到dom的时候 ,图片数据还没请求回来
   inserted(el, { value }) {
-    // 聚焦元素
+    // 监听dom img 图片加载失败的事件
     if (!el.src) {
       el.src = value
     } else {
@@ -18,7 +14,7 @@ export const imgError = {
     }
   },
   update(el, { value }) {
-    // 聚焦元素
+    // 监听dom img 图片加载失败的事件
     if (!el.src) {
       el.src = value
     } else {
@@ -26,14 +22,17 @@ export const imgError = {
         el.src = value
       }
     }
-  }
+  },
 }
-// 按钮权限判断
+
 export const isHas = {
-  inserted(el, bind) {
-    const has = store.state.permission.points.includes(bind.value)
+  // bind: 指令和dom绑定
+  // inserted: 指令所绑定的元素插入到父节点
+  // update: 指令所绑定的Vnode
+  inserted(el, binding) {
+    const has = store.state.permission.points.includes(binding.value)
     if (!has) {
       el.remove()
     }
-  }
+  },
 }

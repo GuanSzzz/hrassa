@@ -1,10 +1,9 @@
-import router, { asyncRoutes, constantRoutes } from '@/router'
-
+import router, { constantRoutes, asyncRoutes } from '@/router'
 export default {
   namespaced: true,
   state: {
-    routes: [], //我们自己维护的的路由规则，包括所有静态路由+用户所有的动态权限
-    points: []
+    routes: [], // 我们自己维护的路由规则,所有路由规则(静态路由 + 筛选后的动态路由)
+    points: [], // 按钮权限
   },
   mutations: {
     setRoutes(state, routes) {
@@ -12,25 +11,26 @@ export default {
     },
     setPoints(state, payload) {
       state.points = payload
-    }
+    },
   },
   actions: {
-    filtrtRoutes(context, roles) {
+    filterRoutes(context, roles) {
+      // console.log(asyncRoutes)
       const routes = asyncRoutes.filter((item) => {
-        // 拿到用户权限信息，与所有的动态路由比较
-        // 返回一个新数组，就是用户可以访问的路由权限
+        // 如果权限标识在roles.menus, 有这个权限 返回true
+        // 如果权限标识不在roles.menus, 没有这个权限 返回false
         return roles.menus.includes(item.meta.id)
       })
-      //   给路由规则添加动态路由
       context.commit('setRoutes', routes)
-      context.commit('setPoints', roles.points)
-
-      // $router自己有一个可以添加路由的方法addRoute
+      // 怎么动态添加路由规则?
+      // console.log(routes)
       router.addRoutes([
         ...routes,
-        // 404必须放在最后，否则刷新就会404
-        { path: '*', redirect: '/404', hidden: true }
+        { path: '*', redirect: '/404', hidden: true },
       ])
-    }
-  }
+    },
+    setPointsAction(context, points) {
+      context.commit('setPoints', points)
+    },
+  },
 }

@@ -1,14 +1,15 @@
-// 混入组件，组件有的，他都可以有
-import permissionPoints from '@/constant/permissionPoints'
+// 可以定义一个对象,该对象最终会将他混入到组件中
+// 组件有的,这个对象都可以有
+import permissionPoint from '@/constant/permission'
 export default {
   data() {
     return {
-      points: permissionPoints
+      point: permissionPoint,
     }
   },
   methods: {
-    isHas(val) {
-      return this.$store.state.permission.points.includes(val)
-    }
-  }
+    isHas(point) {
+      return this.$store.state.permission.points.includes(point)
+    },
+  },
 }

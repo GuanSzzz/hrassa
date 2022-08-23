@@ -1,13 +1,21 @@
-import PageTools from './PageTools'
-import UploadExcel from './UploadExcel'
-import UploadImg from './UploadImg'
-
-// 如果组件很多 可以利用数组的方法
-const components = [PageTools,UploadExcel,UploadImg]
+import PageTools from '@/components/PageTools'
+import MyTest from '@/components/MyTest'
+import UploadExcel from '@/components/UploadExcel'
+import UploadImg from '@/components/UploadImg'
+import Calendar from '@/components/Calendar'
+import Fullscreen from '@/components/FullScreen'
+import ToggleLang from '@/components/ToggleLang'
+const components = [
+  PageTools,
+  MyTest,
+  UploadExcel,
+  UploadImg,
+  Calendar,
+  Fullscreen,
+  ToggleLang
+]
 export default {
   install(Vue) {
-    // Vue.component('PageTools', PageTools)
-    // 循环遍历绑定组件
     components.forEach((component) => {
       Vue.component(component.name, component)
     })
